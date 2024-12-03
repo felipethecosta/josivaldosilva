@@ -44,7 +44,7 @@ export function PaymentPage({
             <div>
               <h2 className="text-[#404040] font-medium mb-2">
                 <p className="text-[#020617] font-bold">Entrega 01 de 01</p> por
-                Magalu - Receba em até 8 dias úteis
+                Magalu - Receba em até 3 dias úteis
               </h2>
               <div className="flex justify-between items-start">
                 <div className="space-y-2">
@@ -54,7 +54,7 @@ export function PaymentPage({
                   </p>
                   <div className="flex gap-2">
                     <span className="px-2 py-1 bg-gray-200 rounded text-sm">
-                      12.000
+                      9.000
                     </span>
                     <span className="px-2 py-1 bg-gray-200 rounded text-sm">
                       Branco

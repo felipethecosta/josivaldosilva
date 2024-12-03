@@ -93,7 +93,7 @@ export function DeliveryOptions({
                 <div className="w-2 h-2 rounded-full bg-blue-500" />
               </div>
               <div>
-                <p className="font-medium">Receba em até 8 dias úteis</p>
+                <p className="font-medium">Receba em até 3 dias úteis</p>
                 <p className="text-sm text-gray-500">
                   Após o pagamento confirmado
                 </p>
