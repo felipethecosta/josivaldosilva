@@ -50,7 +50,7 @@ export function PaymentPage({
                 <div className="space-y-2">
                   <p className="text-[#404040]">
                     01 Ar-condicionado Split Hi-Wall LG Dual Inverter Compact
-                    +AI 12.000 BTUs Frio Compact S3-Q12JAQAL
+                    +AI 9.000 BTUs Frio Compact S3-Q12JAQAL
                   </p>
                   <div className="flex gap-2">
                     <span className="px-2 py-1 bg-gray-200 rounded text-sm">
