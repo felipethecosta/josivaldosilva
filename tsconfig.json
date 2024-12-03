@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // Atualizado para suportar mais funcionalidades modernas do JS
+    "lib": ["dom", "dom.iterable", "es2020"], // Mudado para ES2020 para consistência com o target
+    "allowJs": true, // Mantido para permitir arquivos JS
+    "skipLibCheck": true, // Evita verificações desnecessárias em bibliotecas externas
+    "strict": true, // Mantido para uma tipagem estrita, essencial em TypeScript
+    "noEmit": true, // Next.js não precisa emitir arquivos JS
+    "esModuleInterop": true, // Permite compatibilidade com módulos CommonJS
+    "module": "esnext", // Recomendado para projetos modernos e Next.js
+    "moduleResolution": "node", // Alterado para "node" para evitar problemas de resolução
+    "resolveJsonModule": true, // Necessário para importação de arquivos JSON
+    "isolatedModules": true, // Next.js requer isso para suporte a SWC
+    "jsx": "preserve", // Mantido para JSX em projetos React
+    "incremental": true, // Para melhorar o tempo de compilação em builds subsequentes
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"] // Mapeamento de alias para facilitar imports
+    }
+  },
+  "include": [
+    "next-env.d.ts", 
+    "**/*.ts", 
+    "**/*.tsx", 
+    ".next/types/**/*.ts" // Garante que os tipos gerados pelo Next.js sejam incluídos
+  ],
+  "exclude": ["node_modules"]
+}
