@@ -5,13 +5,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatCurrency(value: number): string {
+export function formatCurrency(value: number | string): string {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(value);
+  }).format(Number(value));
 }
 
 export function formatCPFCNPJ(value: string): string {
@@ -30,10 +30,15 @@ export function formatCPFCNPJ(value: string): string {
   );
 }
 
-export function formatCEP(value: string): string {
-  const numbers = value.replace(/\D/g, "");
-  return numbers.replace(/(\d{5})(\d{3})/g, "$1-$2");
-}
+export const formatCPF = (value: string) => {
+  const numbers = value.replace(/\D/g, '');
+  return numbers.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, '$1.$2.$3-$4');
+};
+
+export const formatCEP = (value: string) => {
+  const numbers = value.replace(/\D/g, '');
+  return numbers.replace(/(\d{5})(\d{3})/g, '$1-$2');
+};
 
 export function isValidCPFCNPJ(value: string): boolean {
   const numbers = value.replace(/\D/g, "");

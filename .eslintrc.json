@@ -6,7 +6,7 @@
       { 
         "varsIgnorePattern": "^_",
         "argsIgnorePattern": "^_",
-        "caughtErrorsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_|^error$|^err$",
         "destructuredArrayIgnorePattern": "^_",
         "ignoreRestSiblings": true
       }

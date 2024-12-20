@@ -19,10 +19,7 @@ export async function POST(request: Request) {
       console.log("4. Código não fornecido");
       return NextResponse.json(
         { error: "Código não fornecido" },
-        {
-          status: 400,
-          headers: corsHeaders,
-        }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -37,40 +34,26 @@ export async function POST(request: Request) {
     console.log("6. Resultado da busca:", record);
 
     if (record) {
-      // eslint-disable-next-line prefer-const
-      let pixCode = record.pixCode;
+      const pixCode = record.pixCode;
       let qrCodePath = record.qrCodePath;
 
-      // Se não houver pixCode, gere um valor ou retorne erro
       if (!pixCode) {
         console.error("PixCode não encontrado no registro!");
         return NextResponse.json(
-          {
-            error: "PixCode ausente no registro.",
-          },
-          {
-            status: 500,
-            headers: corsHeaders,
-          }
+          { error: "PixCode ausente no registro." },
+          { status: 500, headers: corsHeaders }
         );
       }
 
-      // Se não houver qrCodePath, verifique ou gere um novo QR code
+      // Gerar QR Code se necessário
       if (!qrCodePath) {
         const qrCodeFileName = `qrcode_${record.orderNumber}.png`;
-        const qrCodeFilePath = path.join(
-          process.cwd(),
-          "public",
-          "qrcodes",
-          qrCodeFileName
-        );
+        const qrCodeFilePath = path.join(process.cwd(), "public", "qrcodes", qrCodeFileName);
 
         try {
-          // Verifica se o arquivo já existe
           await fs.access(qrCodeFilePath);
           qrCodePath = `/qrcodes/${qrCodeFileName}`;
         } catch (error) {
-          // Se não existir, cria o diretório e gera o QR Code
           try {
             await fs.mkdir(path.dirname(qrCodeFilePath), { recursive: true });
             await QRCode.toFile(qrCodeFilePath, pixCode);
@@ -78,51 +61,33 @@ export async function POST(request: Request) {
           } catch (err) {
             console.error("Erro ao gerar QR Code:", err);
             return NextResponse.json(
-              {
-                error: "Erro ao gerar QR Code.",
-                details:
-                  err instanceof Error ? err.message : "Erro desconhecido",
-              },
-              {
-                status: 500,
-                headers: corsHeaders,
-              }
+              { error: "Erro ao gerar QR Code." },
+              { status: 500, headers: corsHeaders }
             );
           }
         }
       }
 
-      // Atualiza o registro no banco de dados se necessário
+      // Atualizar registro se necessário
       if (pixCode !== record.pixCode || qrCodePath !== record.qrCodePath) {
-        try {
-          await prisma.record.update({
-            where: { id: record.id },
-            data: {
-              pixCode: pixCode,
-              qrCodePath: qrCodePath,
-            },
-          });
-        } catch (err) {
-          console.error("Erro ao atualizar registro no banco de dados:", err);
-          return NextResponse.json(
-            {
-              error: "Erro ao atualizar registro no banco de dados.",
-              details: err instanceof Error ? err.message : "Erro desconhecido",
-            },
-            {
-              status: 500,
-              headers: corsHeaders,
-            }
-          );
-        }
+        await prisma.record.update({
+          where: { id: record.id },
+          data: { pixCode, qrCodePath },
+        });
       }
 
-      // Formata endereço completo
       const fullAddress = `${record.address}, ${record.number}${
         record.complement ? ` - ${record.complement}` : ""
       }${record.reference ? ` - ${record.reference}` : ""} - ${
         record.bairro
       } - ${record.stateCity}`;
+
+      // Buscar o produto relacionado ao registro
+      const product = await prisma.product.findFirst({
+        where: {
+          title: record.product
+        }
+      });
 
       const responseData = {
         valid: true,
@@ -140,39 +105,28 @@ export async function POST(request: Request) {
           orderNumber: record.orderNumber,
           pixCode: pixCode,
           qrCodeUrl: qrCodePath,
+          product: {
+            id: product?.id || record.id,
+            title: record.product,
+            imageUrl: product?.imageUrl || record.qrCodePath
+          }
         },
       };
 
       console.log("7. Enviando resposta com dados do registro:", responseData);
-
-      return NextResponse.json(responseData, {
-        status: 200,
-        headers: corsHeaders,
-      });
+      return NextResponse.json(responseData, { status: 200, headers: corsHeaders });
     }
 
     console.log("8. Código não encontrado ou inativo");
     return NextResponse.json(
-      {
-        valid: false,
-        error: "Código não encontrado ou inativo",
-      },
-      {
-        status: 404,
-        headers: corsHeaders,
-      }
+      { valid: false, error: "Código não encontrado ou inativo" },
+      { status: 404, headers: corsHeaders }
     );
   } catch (error) {
     console.error("9. Erro na verificação:", error);
     return NextResponse.json(
-      {
-        error: "Erro interno do servidor na verificação do código.",
-        details: error instanceof Error ? error.message : "Erro desconhecido",
-      },
-      {
-        status: 500,
-        headers: corsHeaders,
-      }
+      { error: "Erro interno do servidor na verificação do código." },
+      { status: 500, headers: corsHeaders }
     );
   }
 }

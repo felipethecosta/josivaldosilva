@@ -123,6 +123,14 @@ export default function AdminLayout({
                   <span>Usuários</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href={`/${token}/painel/admin/produtos`}>
+                    <Package2 className="h-4 w-4" />
+                    <span>Produtos</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarContent>
           <SidebarFooter>

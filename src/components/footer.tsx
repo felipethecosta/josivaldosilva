@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function Footer() {
   return (
-    <footer className="bg-black text-white py-4">
+    <footer className="bg-[#2563eb] text-white py-4">
       <div className="container mx-auto px-2">
         {/* Certificates Section */}
         <div className="flex justify-center items-center gap-4 mb-4">

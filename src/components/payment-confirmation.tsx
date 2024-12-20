@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { Inter } from 'next/font/google'
+const inter = Inter({ subsets: ['latin'] })
 
 interface PaymentConfirmationProps {
   orderNumber: string;
@@ -58,74 +60,76 @@ export function PaymentConfirmation({
   };
 
   return (
-    <div className="w-full max-w-[800px] mx-auto px-4">
-      <div className="text-center">
-        <h1 className="text-[#58C22E] text-xl font-bold mb-8">
-          Para finalizar a sua compra é só realizar o pagamento com Pix!
-        </h1>
+    <div className={inter.className}>
+      <div className="w-full max-w-[800px] mx-auto px-4">
+        <div className="text-center">
+          <h1 className="text-[#58C22E] text-xl font-bold mb-8">
+            Para finalizar a sua compra é só realizar o pagamento com Pix!
+          </h1>
 
-        <div className="bg-[#F8F9FA] rounded p-6 mb-4">
-          <p className="text-gray-600 mb-0">Número do pedido</p>
-          <p className="font-bold text-[#2196F3] text-2xl mb-4">
-            {orderNumber}
-          </p>
-          <p className="text-gray-600 mb-2">
-            Confirmação de pedido enviada para email de cadastro.
-          </p>
-        </div>
-
-        <div className="bg-[#F8F9FA] rounded p-6">
-          <div className="flex justify-center items-center gap-2 mb-6">
-            <Image src="/pix.png" alt="PIX" width={24} height={24} />
-            <span className="font-bold text-[#020617]">Pagamento via Pix</span>
+          <div className="bg-[#F8F9FA] rounded p-6 mb-4">
+            <p className="text-gray-600 mb-0">Número do pedido</p>
+            <p className="font-bold text-[#2196F3] text-2xl mb-4">
+              {orderNumber}
+            </p>
+            <p className="text-gray-600 mb-2">
+              Confirmação de pedido enviada para email de cadastro.
+            </p>
           </div>
 
-          <p className="text-gray-600 text-sm mb-6">
-            Escaneie o código QR com a câmera do seu celular ou copie e cole o
-            código, no aplicativo do seu banco.
-          </p>
+          <div className="bg-[#F8F9FA] rounded p-6">
+            <div className="flex justify-center items-center gap-2 mb-6">
+              <Image src="/pix.png" alt="PIX" width={24} height={24} />
+              <span className="font-bold text-[#020617]">Pagamento via Pix</span>
+            </div>
 
-          <div className="bg-white p-3 rounded mb-4 text-sm break-all">
-            {pixCode}
+            <p className="text-gray-600 text-sm mb-6">
+              Escaneie o código QR com a câmera do seu celular ou copie e cole o
+              código, no aplicativo do seu banco.
+            </p>
+
+            <div className="bg-white p-3 rounded mb-4 text-sm break-all">
+              {pixCode}
+            </div>
+
+            <Button
+              className={`w-full bg-[#58C22E] hover:bg-[#4CAF50] text-white mb-4 ${
+                isCopied ? "opacity-75" : ""
+              }`}
+              onClick={handleCopyPixCode}
+            >
+              {isCopied ? "Código Pix copiado!" : "Copiar código Pix"}
+            </Button>
+
+            <p className="text-sm text-gray-600 mb-4 font-bold">
+              O código é válido por mais {hours.toString().padStart(2, "0")}:
+              {minutes.toString().padStart(2, "0")}:
+              {seconds.toString().padStart(2, "0")}
+            </p>
+
+            <div className="mb-4">
+              {qrCodeUrl ? (
+                <Image
+                  src={qrCodeUrl}
+                  alt="QR Code Pix"
+                  width={200}
+                  height={200}
+                  className="mx-auto"
+                />
+              ) : (
+                <div className="w-[200px] h-[200px] bg-gray-200 mx-auto flex items-center justify-center">
+                  <span className="text-gray-500">QR Code não disponível</span>
+                </div>
+              )}
+            </div>
+
+            <p className="text-[#0083CA] font-bold text-lg mb-4">{totalAmount}</p>
+
+            <p className="text-sm text-gray-500 font-bold">
+              Se o pagamento não for confirmado, não se preocupe. O pedido será
+              cancelado automaticamente.
+            </p>
           </div>
-
-          <Button
-            className={`w-full bg-[#58C22E] hover:bg-[#4CAF50] text-white mb-4 ${
-              isCopied ? "opacity-75" : ""
-            }`}
-            onClick={handleCopyPixCode}
-          >
-            {isCopied ? "Código Pix copiado!" : "Copiar código Pix"}
-          </Button>
-
-          <p className="text-sm text-gray-600 mb-4 font-bold">
-            O código é válido por mais {hours.toString().padStart(2, "0")}:
-            {minutes.toString().padStart(2, "0")}:
-            {seconds.toString().padStart(2, "0")}
-          </p>
-
-          <div className="mb-4">
-            {qrCodeUrl ? (
-              <Image
-                src={qrCodeUrl}
-                alt="QR Code Pix"
-                width={200}
-                height={200}
-                className="mx-auto"
-              />
-            ) : (
-              <div className="w-[200px] h-[200px] bg-gray-200 mx-auto flex items-center justify-center">
-                <span className="text-gray-500">QR Code não disponível</span>
-              </div>
-            )}
-          </div>
-
-          <p className="text-[#0083CA] font-bold text-lg mb-4">{totalAmount}</p>
-
-          <p className="text-sm text-gray-500 font-bold">
-            Se o pagamento não for confirmado, não se preocupe. O pedido será
-            cancelado automaticamente.
-          </p>
         </div>
       </div>
     </div>

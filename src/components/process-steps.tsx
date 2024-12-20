@@ -1,5 +1,7 @@
 import { Check } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { Inter } from 'next/font/google'
+const inter = Inter({ subsets: ['latin'] })
 
 interface ProcessStep {
   title: string;
@@ -16,7 +18,7 @@ export function ProcessSteps({ steps, currentStep }: ProcessStepsProps) {
   const progress = (currentStep / (steps.length - 1)) * 100;
 
   return (
-    <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto px-4 sm:px-6">
+    <div className={inter.className}>
       <Progress value={progress} className="mb-6 sm:mb-8" />
       <div className="space-y-6 sm:space-y-8">
         {steps.map((step, index) => (
